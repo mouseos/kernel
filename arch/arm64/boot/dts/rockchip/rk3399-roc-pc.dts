@@ -41,35 +41,37 @@
  */
 
 /dts-v1/;
-#include "rk3399-sapphire-excavator-edp.dtsi"
+
+#include "rk3399-roc-pc.dtsi"
 
 / {
-	model = "Rockchip RK3399 Excavator Board edp (Android)";
-	compatible = "rockchip,android", "rockchip,rk3399-excavator-edp", "rockchip,rk3399";
+	model = "ROC-RK3399-PC HDMI+DP(Android)";
+	compatible = "rockchip,android", "rockchip,roc-rk3399-pc", "rockchip,rk3399";
 };
 
 &firmware_android {
 	compatible = "android,firmware";
+	boot_devices = "fe330000.sdhci";
+	vbmeta {
+		compatible = "android,vbmeta";
+		parts = "vbmeta,boot,system,vendor,dtbo";
+	};
 	fstab {
 		compatible = "android,fstab";
-		system {
-			compatible = "android,system";
-			dev = "/dev/block/by-name/system";
-			type = "ext4";
-			mnt_flags = "ro,barrier=1,inode_readahead_blks=8";
-			fsmgr_flags = "wait,verify";
-		};
 		vendor {
 			compatible = "android,vendor";
 			dev = "/dev/block/by-name/vendor";
 			type = "ext4";
 			mnt_flags = "ro,barrier=1,inode_readahead_blks=8";
-			fsmgr_flags = "wait,verify";
+			fsmgr_flags = "wait,avb";
 		};
 	};
 };
+&hdmi {
+	status = "okay";
+};
 
-&dp_sound {
+&hdmi_in_vopl {
 	status = "disabled";
 };
 
@@ -77,14 +79,28 @@
 	status = "disabled";
 };
 
+&dp_sound {
+	status = "okay";
+};
+
 &hdmi_sound {
 	status = "okay";
 };
 
-&isp0 {
-	status = "okay";
+&dp_in_vopb {
+	status = "disabled";
 };
 
-&isp1 {
-	status = "okay";
+&route_hdmi { 
+    status = "okay"; 
 };
+&vopb { 
+    assigned-clocks = <&cru DCLK_VOP0_DIV>; 
+    assigned-clock-parents = <&cru PLL_VPLL>; 
+}; 
+
+&vopl { 
+    assigned-clocks = <&cru DCLK_VOP1_DIV>; 
+    assigned-clock-parents = <&cru PLL_CPLL>; 
+};
+
