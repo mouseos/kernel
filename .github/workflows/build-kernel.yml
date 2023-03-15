@@ -1,3 +1,5 @@
+
+
 name: Build Kernel
 
 on:
@@ -24,7 +26,6 @@ jobs:
 
       - name: Install toolchain
         if: steps.cache.outputs.cache-hit != 'true'
-        working-directory: kernel
         run: |
           wget https://releases.linaro.org/components/toolchain/binaries/7.3-2018.05/aarch64-linux-gnu/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu.tar.xz
           sudo tar xvf gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu.tar.xz  -C /usr/local/
@@ -33,10 +34,11 @@ jobs:
           export ARCH=arm64
           export CROSS_COMPILE=/usr/local/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
           make rockchip_linux_defconfig
-          make -j"$(nproc)"
-          make rk3399-evb.img
+          make -j8
       - name: Upload
         uses: actions/upload-artifact@v3
-        path: |
-          **
-        if-no-files-found: ignore
+        with:
+          name: rockchip-kernel
+          path: |
+            **
+          if-no-files-found: ignore
