@@ -33,13 +33,18 @@ jobs:
         run: |
           export ARCH=arm64
           export CROSS_COMPILE=/usr/local/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
-          make rockchip_linux_defconfig
+          make RK3399_ZMOOTH_defconfig
           make -j8
-          make rk3399-evb.img
+          make rk3399-tve1030g_IMT.img
+          make bzImage
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: rockchip-kernel
+          name: zmooth-kernel
           path: |
-            **
+            arch/arm64/boot/Image
+            arch/arm64/boot/dts/rockchip/**
+            vmlinux
+            kernel/**
+            
           if-no-files-found: ignore
