@@ -37,7 +37,6 @@ jobs:
           make rk3399-evb.img
       - name: Upload
         uses: actions/upload-artifact@v3
-        with:
-          name: rockchip-kernel
-          path: **
-          if-no-files-found: ignore
+        path: |
+          **
+        if-no-files-found: ignore
