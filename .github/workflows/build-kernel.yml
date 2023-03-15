@@ -36,7 +36,6 @@ jobs:
           make RK3399_ZMOOTH_defconfig
           make -j8
           make rk3399-tve1030g_IMT.img
-          make bzImage
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
