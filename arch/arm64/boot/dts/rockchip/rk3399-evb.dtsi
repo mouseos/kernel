@@ -628,3 +628,4 @@
 	uboot-set = <RK3399_PMU1830_VDD_1V8>;
 	pmu1830-supply = <&vcc1v8_pmu>;
 };
+
