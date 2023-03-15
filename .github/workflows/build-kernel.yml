@@ -45,5 +45,6 @@ jobs:
             arch/arm64/boot/dts/rockchip/**
             vmlinux
             kernel/**
+            **.img
             
           if-no-files-found: ignore
