@@ -1,5 +1,3 @@
-
-
 name: Build Kernel
 
 on:
@@ -21,21 +19,23 @@ jobs:
         id: cache
         uses: actions/cache@v3
         with:
-          path: /usr/local/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu
+          path: gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu
           key: gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu
 
       - name: Install toolchain
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           wget https://releases.linaro.org/components/toolchain/binaries/7.3-2018.05/aarch64-linux-gnu/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu.tar.xz
-          sudo tar xvf gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu.tar.xz  -C /usr/local/
+          tar xvf gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu.tar.xz
+
       - name: Build kernel
         run: |
           export ARCH=arm64
-          export CROSS_COMPILE=/usr/local/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
+          export CROSS_COMPILE=$(pwd)/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
           make RK3399_IMT_defconfig
           make -j8
           make rk3399-tve1030g_IMT.img
+
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
@@ -45,5 +45,4 @@ jobs:
             arch/arm64/boot/dts/rockchip/**
             vmlinux
             **.img
-            
           if-no-files-found: ignore
