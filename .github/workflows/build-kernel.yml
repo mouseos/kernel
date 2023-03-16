@@ -36,7 +36,7 @@ jobs:
           make RK3399_IMT_defconfig
           make -j8
           make rk3399-tve1030g_IMT.img
-      - name: Build kernel
+      - name: Build modules
         run: |
           mkdir modules
           export INSTALL_MOD_PATH=modules/
