@@ -25,11 +25,12 @@ jobs:
       - name: Install toolchain
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          wget https://releases.linaro.org/components/toolchain/binaries/7.3-2018.05/aarch64-linux-gnu/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu.tar.xz
+          curl -O https://releases.linaro.org/components/toolchain/binaries/7.3-2018.05/aarch64-linux-gnu/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu.tar.xz
           tar xvf gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu.tar.xz
 
       - name: Build kernel
         run: |
+          echo "commit=$(echo ${{ github.sha }} | cut -c 1-7)" >> $GITHUB_ENV
           export ARCH=arm64
           export CROSS_COMPILE=$(pwd)/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
           make RK3399_IMT_defconfig
@@ -39,7 +40,7 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: zmooth-kernel
+          name: zmooth-kernel@${{ env.commit }}
           path: |
             arch/arm64/boot/Image
             arch/arm64/boot/dts/rockchip/**
