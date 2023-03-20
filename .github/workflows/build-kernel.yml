@@ -39,6 +39,7 @@ jobs:
       - name: Build modules
         run: |
           mkdir modules
+          make modules
           make INSTALL_MOD_PATH=modules INSTALL_MOD_STRIP=1 modules_install
       - name: Upload
         uses: actions/upload-artifact@v3
